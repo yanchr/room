@@ -7,6 +7,14 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { KeyframeTrack, Vector2, Vector3 } from 'three'
 
+//import gsap from 'gsap'
+import * as dat from 'lil-gui'
+
+/**
+ * Debug
+ */
+ const gui = new dat.GUI()
+
 
 /**
  * Texture
@@ -15,7 +23,7 @@ import { KeyframeTrack, Vector2, Vector3 } from 'three'
 
 const parameters = {
     color: 0xff0000,
-}
+    lightColor: 0xff9000}
 /**
  * Base
  */
@@ -41,9 +49,18 @@ const scene = new THREE.Scene()
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.2)
 scene.add(ambientLight)
 
-const spotLight = new THREE.SpotLight(0xff9000, 1, 10, Math.PI * 0.45, 0.25, 0.2)
+const spotLight = new THREE.SpotLight(parameters.lightColor, 1, 10, Math.PI * 0.45, 0.25, 0.2)
 spotLight.position.set(-0.2, 2.4, 0.07)
 scene.add(spotLight)
+gui.addColor(parameters, 'lightColor').onChange(() =>
+{
+    spotLight.color.set(parameters.lightColor)
+})
+gui
+    .add(spotLight, 'intensity')
+    .min(0)
+    .max(3)
+    .step(0.01)
 
 const spotlightHelper = new THREE.SpotLightHelper(spotLight, 0.2)
 //scene.add(spotlightHelper)
