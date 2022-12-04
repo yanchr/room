@@ -38,14 +38,16 @@ const scene = new THREE.Scene()
  /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.2)
 scene.add(ambientLight)
 
-const pointLight = new THREE.PointLight(0xffffff, 0.5)
-pointLight.position.x = 2
-pointLight.position.y = 3
-pointLight.position.z = 4
-scene.add(pointLight)
+const spotLight = new THREE.SpotLight(0xff9000, 1, 10, Math.PI * 0.45, 0.25, 0.2)
+spotLight.position.set(-0.2, 2.4, 0.07)
+scene.add(spotLight)
+
+const spotlightHelper = new THREE.SpotLightHelper(spotLight, 0.2)
+//scene.add(spotlightHelper)
+
 /**
  * Materials
 */
@@ -130,9 +132,8 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.z = 2
-camera.position.y = 6
-camera.position.x = 8
+camera.position.set(9, 5, 4)
+camera.position.set(2, 7, 2)
 scene.add(camera)
 
 
@@ -194,7 +195,7 @@ function manageWallVisibility() {
         leftWall.visible = true
     }
 
-    if(sealingDistance < floorDistance) {
+    if(camera.position.y >= -0.5) {
         sealing.visible = false
         floor.visible = true
     } else {
